@@ -18,7 +18,7 @@ data={
     "image_type":"BASE64",
     "face_field":"beauty",
 }
-with open('123.jpg','rb') as f:
+with open('1234.jpg','rb') as f:
     image = base64.b64encode(f.read())
     data["image"]=str(image,'utf-8')
 
