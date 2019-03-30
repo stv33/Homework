@@ -5,6 +5,24 @@ import json
 import base64
 import cv2
 
+class Face:
+    def __init__(self,score,x,y,row,col):
+        self.score=score
+        self.x = x
+        self.y = y
+        self.row = row
+        self.col = col
+    
+    def get_judgement(self):
+        if self.score >= 60:
+            return "S"
+        elif self.score >= 50:
+            return "A+"
+        elif self.score >= 40:
+            return "A"
+        else:
+            return "A-" 
+
 
 
 api_key = '7kKDWk30B4oe5Hs0NM3zcAst'
@@ -43,19 +61,23 @@ with open('image.jpg','rb') as f:
 res2= eval(requests.post(url=face_text,data=data,headers=header).text)
 
 #获取人脸位置和颜值信息
-score=int(res2["result"]["face_list"][0]["beauty"])
-x=int(res2["result"]["face_list"][0]["location"]["left"])
-y=int(res2["result"]["face_list"][0]["location"]["top"])
-row=int(res2["result"]["face_list"][0]["location"]["width"])
-col=int(res2["result"]["face_list"][0]["location"]["height"])
-print("颜值：",score)
-print("x:",x,"y:",y,"x+row:",x+row,"y+col:",y+col)
+
+Answer=Face(int(res2["result"]["face_list"][0]["beauty"]),
+int(res2["result"]["face_list"][0]["location"]["left"]),
+int(res2["result"]["face_list"][0]["location"]["top"]),
+int(res2["result"]["face_list"][0]["location"]["width"]),
+int(res2["result"]["face_list"][0]["location"]["height"]))
+print("颜值：",Answer.score)
+print("x:",Answer.x,"y:",Answer.y,"x+row:",Answer.x+Answer.row,"y+col:",Answer.y+Answer.col)
 #给保存好的图片加上框框和备注
 img_token=cv2.imread("image.jpg")
 colors = (0,0,255)
-cv2.rectangle(img_token, (x, y), (x+row,y+col), colors, 5)
+cv2.rectangle(img_token, (Answer.x, Answer.y), (Answer.x+Answer.row,Answer.y+Answer.col), colors, 5)
+cv2.putText(img_token, Answer.get_judgement(), (Answer.x,Answer.y), cv2.FONT_HERSHEY_SIMPLEX, 5, colors, 12)
 cv2.imshow("img",img_token)
 cv2.waitKey()
+cv2.imwrite("imageWithjudgement.jpg",img_token)
+
 
 
 
