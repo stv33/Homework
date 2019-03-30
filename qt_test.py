@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QApplication,QMainWindow
 
 
 
-
 class MyWindow(QMainWindow,Ui_dialog):
     def __init__(self,parent=None):
         super(MyWindow, self).__init__(parent)
