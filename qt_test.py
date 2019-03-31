@@ -1,8 +1,14 @@
 import sys, cv2, time
-
 from beauty_score import Ui_dialog
+from PyQt5.QtWidgets import QApplication,QMainWindow,QWidget,QHBoxLayout,QLabel
+from PyQt5.QtGui import QPixmap
+import requests
+from bs4 import BeautifulSoup
+import os
+import json
+import base64
+from judge import Face,judging
 
-from PyQt5.QtWidgets import QApplication,QMainWindow
 
 
 
@@ -17,5 +23,7 @@ if __name__ == '__main__':
     MainWindow = QMainWindow()
     ui= Ui_dialog()    
     ui.setupUi(MainWindow)
+    ui.Botton_use(MainWindow)
     MainWindow.show()
+    ui.show_img_in_lable_center("1234.jpg")
     sys.exit(app.exec_())

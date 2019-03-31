@@ -7,9 +7,29 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPixmap
+import sys, cv2, time
+import judge
+from judge import judging,Face
 
 
-class Ui_dialog(object):
+def take_photo():
+    cap = cv2.VideoCapture(0)
+    while True:
+        sucess,img =cap.read()
+        cv2.imshow("img",img)
+        k=cv2.waitKey(1)
+        if k ==27:
+            cv2.destoryAllwindow()
+            break
+        elif k==ord("s"):
+            cv2.imwrite("image.jpg",img)
+            cv2.destroyWindow("img")
+            break
+    cap.release()
+
+
+class Ui_dialog(judging):
     def setupUi(self, dialog):
         dialog.setObjectName("dialog")
         dialog.resize(1012, 644)
@@ -36,39 +56,53 @@ class Ui_dialog(object):
         self.lcdNumber.raise_()
         self.pushButton_2.raise_()
         self.label.raise_()
-        # self.pushButton.clicked.connect()
-
         self.retranslateUi(dialog)
         QtCore.QMetaObject.connectSlotsByName(dialog)
+        self.access_token_fuc()
 
     def retranslateUi(self, dialog):
         _translate = QtCore.QCoreApplication.translate
         dialog.setWindowTitle(_translate("dialog", "Dialog"))
         self.pushButton.setText(_translate("dialog", "Beauty Score"))
-        self.pushButton_2.setText(_translate("dialog", "reset"))
+        self.pushButton_2.setText(_translate("dialog", "photo by key s"))
 
-    def show_img_in_lable_center( label, fname):
+    def show_img_in_lable_center( self, fname):
     #label表示要用来显示图片的那个标签~
     #fname表示事先获取到的要打开的图片文件名（含路径）
-    pix_map = QPixmap(fname)
-    img_w = pix_map.width()
-    img_h = pix_map.height()
-    lab_w = label.width()
-    lab_h = label.height()
-    if (img_w > lab_w) | (img_h > lab_h):
+        pix_map = QPixmap(fname)
+        img_w = pix_map.width()
+        img_h = pix_map.height()
+        lab_w = self.label.width()
+        lab_h = self.label.height()
+        if (img_w > lab_w) | (img_h > lab_h):
         #若图片宽高大于label宽高，则在label居中显示按图片原始比例缩放后的图片
-        w_rate = float(img_w) / float(lab_w)
-        h_rate = float(img_h) / float(lab_h)
-        if w_rate >= h_rate:
-            w = lab_w
-            h = int(img_h / w_rate)
+            w_rate = float(img_w) / float(lab_w)
+            h_rate = float(img_h) / float(lab_h)
+            if w_rate >= h_rate:
+                w = lab_w
+                h = int(img_h / w_rate)
+            else:
+                w = int(img_w / h_rate)
+                h = lab_h
         else:
-            w = int(img_w / h_rate)
-            h = lab_h
-    else:
         #若图片宽高都小于label宽高，则按图片原始大小显示
-        w = img_w
-        h = img_h
-    label.setPixmap(pix_map.scaled(w, h))
+            w = img_w
+            h = img_h
+        self.label.setPixmap(pix_map.scaled(w, h))
+
+    def show_token_photo(self):
+            take_photo()
+            self.show_img_in_lable_center("image.jpg")
+
+    def show_photo_with_judgement(self):
+            self.API_judgement()
+            self.show_img_in_lable_center("imageWithjudgement.jpg")
+
+
+
+    def Botton_use(self,dialog):
+        self.pushButton_2.clicked.connect(self.show_token_photo)
+        self.pushButton.clicked.connect(self.show_photo_with_judgement)
+
 
 
