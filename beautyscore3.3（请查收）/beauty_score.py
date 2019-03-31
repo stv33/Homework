@@ -89,7 +89,7 @@ class Ui_dialog(judging):
             w = img_w
             h = img_h
         self.label.setPixmap(pix_map.scaled(w, h))
-    #按键关联函数
+    #按键对应的槽函数
     def show_token_photo(self):
             take_photo()
             self.show_img_in_label_center("image.jpg")
@@ -100,7 +100,7 @@ class Ui_dialog(judging):
             self.lcdNumber.setDecMode()
             self.lcdNumber.display(self.Answer.score)
 
-    #按键触发关联函数
+    #使按键触发槽函数
     def Botton_use(self,dialog):
         self.pushButton_2.clicked.connect(self.show_token_photo)
         self.pushButton.clicked.connect(self.show_photo_with_judgement)
