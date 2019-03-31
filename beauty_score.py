@@ -12,7 +12,7 @@ import sys, cv2, time
 import judge
 from judge import judging,Face
 
-
+#使用opencv实时摄取照片
 def take_photo():
     cap = cv2.VideoCapture(0)
     while True:
@@ -20,7 +20,7 @@ def take_photo():
         cv2.imshow("img",img)
         k=cv2.waitKey(1)
         if k ==27:
-            cv2.destoryAllwindow()
+            cv2.destroyWindow("img")
             break
         elif k==ord("s"):
             cv2.imwrite("image.jpg",img)
@@ -28,7 +28,7 @@ def take_photo():
             break
     cap.release()
 
-
+#UI界面
 class Ui_dialog(judging):
     def setupUi(self, dialog):
         dialog.setObjectName("dialog")
@@ -62,11 +62,11 @@ class Ui_dialog(judging):
 
     def retranslateUi(self, dialog):
         _translate = QtCore.QCoreApplication.translate
-        dialog.setWindowTitle(_translate("dialog", "Dialog"))
+        dialog.setWindowTitle(_translate("dialog", "BeautyScore"))
         self.pushButton.setText(_translate("dialog", "Beauty Score"))
         self.pushButton_2.setText(_translate("dialog", "photo by key s"))
-
-    def show_img_in_lable_center( self, fname):
+#在Label中居中打开图片
+    def show_img_in_label_center( self, fname):
     #label表示要用来显示图片的那个标签~
     #fname表示事先获取到的要打开的图片文件名（含路径）
         pix_map = QPixmap(fname)
@@ -89,17 +89,18 @@ class Ui_dialog(judging):
             w = img_w
             h = img_h
         self.label.setPixmap(pix_map.scaled(w, h))
-
+    #按键关联函数
     def show_token_photo(self):
             take_photo()
-            self.show_img_in_lable_center("image.jpg")
+            self.show_img_in_label_center("image.jpg")
 
     def show_photo_with_judgement(self):
             self.API_judgement()
-            self.show_img_in_lable_center("imageWithjudgement.jpg")
+            self.show_img_in_label_center("imageWithjudgement.jpg")
+            self.lcdNumber.setDecMode()
+            self.lcdNumber.display(self.Answer.score)
 
-
-
+    #按键触发关联函数
     def Botton_use(self,dialog):
         self.pushButton_2.clicked.connect(self.show_token_photo)
         self.pushButton.clicked.connect(self.show_photo_with_judgement)
