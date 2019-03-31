@@ -11,7 +11,7 @@ from judge import Face,judging
 
 
 
-
+#GUI
 class MyWindow(QMainWindow,Ui_dialog):
     def __init__(self,parent=None):
         super(MyWindow, self).__init__(parent)

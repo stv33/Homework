@@ -5,6 +5,7 @@ import json
 import base64
 import cv2
 
+#定义包含一张脸属性的类
 class Face():
     def __init__(self,score,x,y,row,col):
         self.score=score
@@ -23,6 +24,7 @@ class Face():
         else:
             return "A-" 
 
+#定义颜值评价相关操作的类
 class judging(object):
 
 
@@ -60,11 +62,11 @@ class judging(object):
         int(res2["result"]["face_list"][0]["location"]["height"]))
         print("颜值：",self.Answer.score)
         print("x:",self.Answer.x,"y:",self.Answer.y,"x+row:",self.Answer.x+self.Answer.row,"y+col:",self.Answer.y+self.Answer.col)
-        #给保存好的图片加上框框和备注
+        #给保存好的图片加上框框和等第
         img_token=cv2.imread("image.jpg")
         colors = (0,0,255)
         cv2.rectangle(img_token, (self.Answer.x, self.Answer.y), (self.Answer.x+self.Answer.row,self.Answer.y+self.Answer.col), colors, 5)
-        cv2.putText(img_token, self.Answer.get_judgement(), (self.Answer.x,self.Answer.y), cv2.FONT_HERSHEY_SIMPLEX, 5, colors, 12)
+        cv2.putText(img_token, self.Answer.get_judgement(), (self.Answer.x,self.Answer.y), cv2.FONT_HERSHEY_SIMPLEX, 5, colors, 10)
         cv2.imwrite("imageWithjudgement.jpg",img_token)
 
 
