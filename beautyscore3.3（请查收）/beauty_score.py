@@ -62,7 +62,7 @@ class Ui_dialog(judging):
 
     def retranslateUi(self, dialog):
         _translate = QtCore.QCoreApplication.translate
-        dialog.setWindowTitle(_translate("dialog", "Dialog"))
+        dialog.setWindowTitle(_translate("dialog", "BeautyScore"))
         self.pushButton.setText(_translate("dialog", "Beauty Score"))
         self.pushButton_2.setText(_translate("dialog", "photo by key s"))
 #在Label中居中打开图片
