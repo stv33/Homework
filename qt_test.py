@@ -25,5 +25,5 @@ if __name__ == '__main__':
     ui.setupUi(MainWindow)
     ui.Botton_use(MainWindow)
     MainWindow.show()
-    ui.show_img_in_lable_center("1234.jpg")
+    ui.show_img_in_label_center("cover.jpg")
     sys.exit(app.exec_())
