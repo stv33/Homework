@@ -21,7 +21,6 @@ if __name__ == '__main__':
     headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'\
                             ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome'\
                             '74.0.3729.108 Safari/537.36'
-                            
 
     # 下面是参数的填充
     keyvalue['m'] = 'QueryData'
@@ -35,9 +34,6 @@ if __name__ == '__main__':
     # 发出请求，使用get方法
     # 建立一个Session,在Session基础上进行一次请求
     s = requests.session()
-    r = s.get(url, params=keyvalue, headers=headers)
-    keyvalue['dfwds'] = '[{"wdcode":"sj","valuecode":"LAST20"}]'
-    r = s.get(url, params=keyvalue, headers=headers)
     #解析数据
     year = [] #年份
     int_year = []#整数形式的年份列表
@@ -48,8 +44,8 @@ if __name__ == '__main__':
     ratio_1 = [] #第一产业就业人员占比
     ratio_2 = [] #第二产业就业人员占比
     ratio_3 = [] #第三产业就业人员占比
-    data_unhandle = json.loads(r.text)
-    data= data_unhandle['returndata']['datanodes']
+    keyvalue['dfwds'] = '[{"wdcode":"zb","valuecode":"A0402"}]'
+    r = s.get(url, params=keyvalue, headers=headers)
     for i in range(1999,2018):
         time.sleep(1)#防ip被封
         # 修改dfwds字段内容
@@ -61,26 +57,26 @@ if __name__ == '__main__':
         r = s.get(url, params=keyvalue, headers=headers)
         data_handle = json.loads(r.text)
         data_i = data_handle['returndata']['datanodes']
+        print(data_i)
         for value in data_i: #若使用爬虫则改为data_i
             if ('A040201_sj' in value['code']):
                 year.append(value['code'][-4:])
-                population.append(int(value['data']['strdata']))
+                population.append(float(value['data']['strdata']))
             if ('A040202_sj' in value['code']):
-                population_1.append(int(value['data']['strdata']))
+                population_1.append(float(value['data']['strdata']))
             if ('A040203_sj' in value['code']):
-                population_2.append(int(value['data']['strdata']))
+                population_2.append(float(value['data']['strdata']))
             if ('A040204_sj' in value['code']):
-                population_3.append(int(value['data']['strdata']))
-    list.reverse(population)
-    list.reverse(population_1)
-    list.reverse(population_2)
-    list.reverse(year)
+                population_3.append(float(value['data']['strdata']))
+
     for i in range(1999,2018):
         int_year.append(i)
     print(year)
     print(int_year)
     print(population)
-
+    print(population_1)
+    print(population_2)
+    print(population_3)
 #定义类来储存每一年的各项数据
     year_table=[]
 
@@ -194,11 +190,11 @@ if __name__ == '__main__':
     plt.bar(year_read, P_read)
     plt.xlabel(u'年份')
     plt.ylabel(u'万人')
-    plt.title(u'年末总人口')
+    plt.title(u'1999-2017年就业总人口')
 
 #2017
     fig2=plt.figure(figsize=(10,6))
-    plt.title('第一、二、三产业占比饼状图')
+    plt.title('2017年第一、二、三产业占比饼状图')
     ratio_map = {
         '第一产业': (R1_read[18], '#7199cf'),
         '第二产业': (R2_read[18], '#4fc4aa'),
@@ -206,10 +202,10 @@ if __name__ == '__main__':
     }
     data = [R1_read[18],R2_read[18],R3_read[18]]
     colors = [x[1] for x in ratio_map.values()]  #对应颜色
-    ingredients = ["第一产业"，"第二产业","第三产业"]
-    plt.pie(data, labels=labels, colors=colors)
+    ingredients = ["第一产业"+str(R1_read[18]),"第二产业"+str(R2_read[18]),"第三产业"+str(R3_read[18])]
+    plt.pie(data, labels=ingredients, colors=colors)
 
-
+    plt.show()
 
     conn.close()
 
