@@ -46,6 +46,8 @@ if __name__ == '__main__':
     ratio_3 = [] #第三产业就业人员占比
     keyvalue['dfwds'] = '[{"wdcode":"zb","valuecode":"A0402"}]'
     r = s.get(url, params=keyvalue, headers=headers)
+    keyvalue['dfwds'] = '[{"wdcode":"sj","valuecode":"LAST20"}]'
+    r = s.get(url, params=keyvalue, headers=headers)
     for i in range(1999,2018):
         time.sleep(1)#防ip被封
         # 修改dfwds字段内容
@@ -57,8 +59,8 @@ if __name__ == '__main__':
         r = s.get(url, params=keyvalue, headers=headers)
         data_handle = json.loads(r.text)
         data_i = data_handle['returndata']['datanodes']
-        print(data_i)
-        for value in data_i: #若使用爬虫则改为data_i
+        print(data_handle)
+        for value in data_i:
             if ('A040201_sj' in value['code']):
                 year.append(value['code'][-4:])
                 population.append(float(value['data']['strdata']))

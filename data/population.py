@@ -58,7 +58,7 @@ if __name__ == '__main__':
         r = s.get(url, params=keyvalue, headers=headers)
         data_handle = json.loads(r.text)
         data_i = data_handle['returndata']['datanodes']
-        for value in data_i: #若使用爬虫则改为data_i
+        for value in data_i: 
             if ('A030101_sj' in value['code']):
                 year.append(value['code'][-4:])
                 population.append(int(value['data']['strdata']))
@@ -66,10 +66,7 @@ if __name__ == '__main__':
                 population_man.append(int(value['data']['strdata']))
             if ('A030103_sj' in value['code']):
                 population_woman.append(int(value['data']['strdata']))
-    list.reverse(population)
-    list.reverse(population_man)
-    list.reverse(population_woman)
-    list.reverse(year)
+
     for i in range(1999,2019):
         int_year.append(i)
     print(year)
